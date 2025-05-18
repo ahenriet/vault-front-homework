@@ -1,51 +1,49 @@
-import { useEffect, useState } from "react";
-
-import TextInput from "./components/TextInput";
-
-const API = "http://localhost:5000";
-
-type Notif = {
-  id: string;
-  type: string;
-  // FIXME we should *probably* not have this `any`
-  data: any;
-};
+import { useEffect, useState } from 'react';
+import NotifList from './components/notifications/NotifList';
+import SearchBar from './components/searchBar/SearchBar';
+import useDebounce from './hooks/useDebounce';
+import { getNotifications } from './services/api';
+import { Notif } from './types/Notif';
+import { toast } from 'react-toastify';
 
 const App = () => {
-  const [searchText, setSearchText] = useState("");
-  const [isLoading, setLoading] = useState(false);
-  const [results, setResults] = useState<null | Notif[]>(null);
+    const [searchText, setSearchText] = useState('');
+    const debouncedSearchText = useDebounce(searchText);
+    const [isLoading, setLoading] = useState(false);
+    const [results, setResults] = useState<null | Notif[]>(null);
 
-  useEffect(() => {
-    const effect = async () => {
-      // FIXME there is something wrong with this loading state... to be investigated :D
-      setLoading(true);
-      const res = await fetch(`${API}/search?q=${searchText}`);
-      const data = await res.json();
-      setResults(data);
-    };
-    effect();
-  }, [searchText, setLoading, setResults]);
+    useEffect(() => {
+        const effect = async () => {
+            setLoading(true);
+            try {
+                const notifications =
+                    await getNotifications(debouncedSearchText);
+                setResults(notifications);
+            } catch (e) {
+                console.error(e);
+                toast(
+                    'An error occurred while fetching notifications. Please try again later.'
+                );
+            } finally {
+                setLoading(false);
+            }
+        };
+        effect();
+    }, [debouncedSearchText, setLoading, setResults]);
 
-  return (
-    <div>
-      <TextInput
-        value={searchText}
-        onChange={setSearchText}
-        placeholder="Type to filter events"
-      />
-      {isLoading ? (
-        <div>{"Loading..."}</div>
-      ) : results ? (
-        <div>
-          {results.map((r) => (
-            // TODO we must finalize this integration!! not very pretty like this
-            <div className="border border-dashed">{JSON.stringify(r)}</div>
-          ))}
+    return (
+        <div className="border rounded-xl p-4 space-y-4 w-[440px] mx-auto">
+            <h2 className="font-bold text-2xl">History</h2>
+            <SearchBar
+                value={searchText}
+                onChange={setSearchText}
+                placeholder="Search"
+                isLoading={isLoading}
+            />
+
+            <NotifList notifs={results} isLoading={isLoading} />
         </div>
-      ) : null}
-    </div>
-  );
+    );
 };
 
 export default App;

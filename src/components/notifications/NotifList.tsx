@@ -1,4 +1,5 @@
 import { Notif } from '../../types/Notif';
+import NoResult from './NoResult';
 import NotifItem from './NotifItem';
 
 type NotifListProps = {
@@ -11,15 +12,11 @@ const NotifList = ({ notifs, isLoading }: NotifListProps) => {
         return null;
     }
     if (!notifs || notifs.length === 0) {
-        return (
-            <h2 className="text-base font-semibold text-black">
-                No result found...
-            </h2>
-        );
+        return <NoResult />;
     }
 
     return (
-        <div>
+        <div className="h-[380px] overflow-auto">
             {notifs.map((notif) => (
                 <NotifItem key={notif.id} notif={notif} />
             ))}

@@ -32,8 +32,8 @@ const App = () => {
     }, [debouncedSearchText, setLoading, setResults]);
 
     return (
-        <div className="border rounded-xl p-4 space-y-4 w-[440px] mx-auto">
-            <h2 className="font-bold text-2xl">History</h2>
+        <div className="border rounded-2xl p-4 space-y-3 w-[440px] mx-auto h-[500px] relative">
+            <h2 className="font-semibold text-2xl">History</h2>
             <SearchBar
                 value={searchText}
                 onChange={setSearchText}
@@ -42,6 +42,10 @@ const App = () => {
             />
 
             <NotifList notifs={results} isLoading={isLoading} />
+            <div
+                className="absolute bottom-0 left-4 right-4 h-8 bg-gradient-to-t from-white to-transparent"
+                style={{ zIndex: 1 }}
+            />
         </div>
     );
 };

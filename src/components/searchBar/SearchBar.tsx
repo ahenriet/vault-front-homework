@@ -20,9 +20,9 @@ const SearchBar = (props: SearchBarProps) => {
 
     return (
         <div className="relative w-full">
-            <Search className="absolute left-3 top-1/2 transform -translate-y-1/2 text-gray-600" />
+            <Search className="absolute left-3 top-1/2 transform -translate-y-1/2 text-gray-600 w-4" />
             <input
-                className="h-12 bg-gray-100 w-full border border-gray-300 rounded-lg p-3 pl-10 pr-10 text-sm text-gray-700 placeholder-gray-400 focus:outline-none focus:border-purple-500"
+                className="h-11 bg-gray-100 w-full border border-gray-100 rounded-lg p-3 pl-10 pr-10 text-sm text-gray-700 placeholder-gray-400 focus:outline-none focus:border-purple-500"
                 type="text"
                 onChange={handleChange}
                 {...p}

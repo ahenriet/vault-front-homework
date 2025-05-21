@@ -1,5 +1,5 @@
 import { NotifTransactionData, NotifType } from '../../types/Notif';
-import { computeGradientColor, computeIconSrc } from '../../utils/helper';
+import { computeGradientColor, computeCryptoIconSrc } from '../../utils/helper';
 import Card from '../ui/Card';
 
 type NotifTransactionProps = {
@@ -11,7 +11,8 @@ const NotifTransaction = ({ notifType, notifData }: NotifTransactionProps) => {
     const title = computeTitle(notifType);
     const subtitle = computeSubtitle(notifData, notifType);
     const amount = `${new Intl.NumberFormat().format(notifData.amount)} ${notifData.unit}`;
-    const iconSrc = computeIconSrc(notifData.unit);
+    const cryptoIconSrc = computeCryptoIconSrc(notifData.unit);
+    const notifTypeIconSrc = computeNotifTypeIconSrc(notifType);
     const gradientColor = computeGradientColor(notifData.unit);
 
     return (
@@ -19,7 +20,8 @@ const NotifTransaction = ({ notifType, notifData }: NotifTransactionProps) => {
             title={title}
             subtitle={subtitle}
             amount={amount}
-            iconSrc={iconSrc}
+            cryptoIconSrc={cryptoIconSrc}
+            notifTypeIconSrc={notifTypeIconSrc}
             gradientColor={gradientColor}
         />
     );
@@ -32,7 +34,7 @@ const computeTitle = (notifType: NotifType) => {
         case 'TRANSACTION_SENT':
             return 'Sent';
         default:
-            return 'Unknown'; // should never happen because parent component would have thrown an error
+            return 'Unknown'; // should never happen because parent component prevents it
     }
 };
 
@@ -46,7 +48,18 @@ const computeSubtitle = (
         case 'TRANSACTION_SENT':
             return `To ${notifData.to}`; // I assume there is a typo in the Figma design: 'to' instead of 'To'
         default:
-            return 'Unknown'; // should never happen because parent component would have thrown an error
+            return 'Unknown'; // should never happen because parent component prevents it
+    }
+};
+
+const computeNotifTypeIconSrc = (notifType: string) => {
+    switch (notifType) {
+        case 'TRANSACTION_RECEIVED':
+            return '/icons/arrow-down.png';
+        case 'TRANSACTION_SENT':
+            return '/icons/arrow-up.png';
+        default:
+            return '/vite.svg'; // should never happen because parent component prevents it
     }
 };
 

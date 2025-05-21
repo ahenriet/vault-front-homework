@@ -14,7 +14,7 @@ export const computeGradientColor = (currency: string) => {
     }
 };
 
-export const computeIconSrc = (currency: string) => {
+export const computeCryptoIconSrc = (currency: string) => {
     switch (currency) {
         case 'BTC':
         case 'bitcoin':
@@ -24,8 +24,8 @@ export const computeIconSrc = (currency: string) => {
         case 'XRP':
             return '/icons/xrp.svg';
         case 'XTZ':
-            return '/icons/xtz.png';
+            return '/icons/xtz.jpg';
         default:
-            return '/vite.svg';
+            return '/vite.svg'; // I would ask the product designer for a default icon for unknown currencies
     }
 };
